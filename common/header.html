@@ -1,5 +1,5 @@
 <script type="text/discourse-plugin" version="0.8.30">
-  api.decorateCooked($cooked => {
+  api.decorateCooked(($cooked, postWidget) => {
     const VALID_TAGS = "h1, h2, h3, h4, h5, h6, p, code, blockquote, .md-table, li";
     const DELIMITER = "=";
 
@@ -28,6 +28,15 @@
     function processChange($cooked, inputEvent, mappings) {
       const value = inputEvent.target.value;
       const key = inputEvent.target.dataset.key;
+
+      if (postWidget) {
+        const placeholderIdentifier = `d-placeholder-${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-${key}`;
+        if (value) {
+          $.cookie(placeholderIdentifier, value);
+        } else {
+          $.removeCookie(placeholderIdentifier);
+        }
+      }
 
       let newValue;
       if (value && value.length && value !== "none") {
@@ -116,7 +125,13 @@
         return;
       }
 
-      const defaultValue = elem.dataset.default;
+      let valueFromCookie;
+      if (postWidget) {
+        const placeholderIdentifier = `d-placeholder-${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}`;
+        valueFromCookie = $.cookie(`${placeholderIdentifier}-${dataKey}`);
+      }
+
+      const defaultValue = valueFromCookie || elem.dataset.default;
       const defaultValues = (elem.dataset.defaults || "").split(",").filter(x => x);
       const description = elem.dataset.description;
 
@@ -159,8 +174,8 @@
           input.setAttribute("placeholder", description);
         }
 
-        if (defaultValue) {
-          input.value = defaultValue;
+        if (valueFromCookie || defaultValue) {
+          input.value = valueFromCookie || defaultValue;
         }
 
         elem.appendChild(input)
