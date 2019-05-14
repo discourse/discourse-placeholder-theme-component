@@ -1,0 +1,39 @@
+.d-wrap[data-wrap=placeholder] {
+  padding: 0.5em;
+  border: 1px solid $primary-medium;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .discourse-placeholder-name {
+    width: 200px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-right: 0.5em;
+  }
+
+  .discourse-placeholder-value,
+  .discourse-placeholder-select {
+    box-sizing: border-box;
+  }
+
+  .discourse-placeholder-value {
+    width: 100%;
+    padding: 0.5em;
+    line-height: $line-height-small;
+    color: $primary;
+    background-color: $secondary;
+    border: 1px solid $primary-medium;
+  }
+
+  .discourse-placeholder-select {
+    width: 100%;
+    margin: 0.5em 0;
+    line-height: $line-height-small;
+    color: $primary;
+    background-color: $secondary;
+    border: 1px solid $primary-medium;
+  }
+}
