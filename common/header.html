@@ -201,22 +201,24 @@
           processChange($cooked, inputEvent, mappings);
         }, 250)
       );
+    
+    Ember.run.later(() => {
+      // trigger fake event to setup initial state
+      Object.keys(placeholders).forEach(placeholderKey => {
+        const placeholder = placeholders[placeholderKey];
 
-    // trigger fake event to setup initial state
-    Object.keys(placeholders).forEach(placeholderKey => {
-      const placeholder = placeholders[placeholderKey];
+        const value =
+          placeholder.default ||
+          (placeholder.defaults.length && !placeholder.description
+            ? placeholder.defaults[0]
+            : null);
 
-      const value =
-        placeholder.default ||
-        (placeholder.defaults.length && !placeholder.description
-          ? placeholder.defaults[0]
-          : null);
-
-      processChange(
-        $cooked,
-        { target: { value, dataset: { key: placeholderKey } } },
-        mappings
-      );
-    });
+        processChange(
+          $cooked,
+          { target: { value, dataset: { key: placeholderKey } } },
+          mappings
+        );
+      });
+    }, 500);
   });
 </script>
