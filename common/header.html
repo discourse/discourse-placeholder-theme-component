@@ -2,6 +2,8 @@
   api.decorateCooked(($cooked, postWidget) => {
     const VALID_TAGS = "h1, h2, h3, h4, h5, h6, p, code, blockquote, .md-table, li";
     const DELIMITER = "=";
+    const mappings = [];
+    const placeholders = {};
 
     // http://davidwalsh.name/javascript-debounce-function
     function debounce(func, wait, immediate) {
@@ -116,9 +118,6 @@
       });
     }
 
-    const mappings = [];
-    const placeholders = {};
-
     $cooked.find(".d-wrap[data-wrap=placeholder]:not(.placeholdered)").each((index, elem) => {
       const dataKey = elem.dataset.key;
       if (!dataKey) {
@@ -182,10 +181,6 @@
       }
     })
 
-    if (Object.keys(placeholders).length > 0) {
-      processPlaceholders(placeholders, $cooked, mappings);
-    }
-
     $cooked
       .on(
         "input",
@@ -201,8 +196,12 @@
           processChange($cooked, inputEvent, mappings);
         }, 250)
       );
-    
+
     Ember.run.later(() => {
+      if (Object.keys(placeholders).length > 0) {
+        processPlaceholders(placeholders, $cooked, mappings);
+      }
+
       // trigger fake event to setup initial state
       Object.keys(placeholders).forEach(placeholderKey => {
         const placeholder = placeholders[placeholderKey];
