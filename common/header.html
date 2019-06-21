@@ -30,6 +30,7 @@
     function processChange($cooked, inputEvent, mappings) {
       const value = inputEvent.target.value;
       const key = inputEvent.target.dataset.key;
+      const delimiter = inputEvent.target.dataset.delimiter;
 
       if (postWidget) {
         const placeholderIdentifier = `d-placeholder-${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-${key}`;
@@ -44,7 +45,7 @@
       if (value && value.length && value !== "none") {
         newValue = value;
       } else {
-        newValue = `${DELIMITER}${key}${DELIMITER}`;
+        newValue = `${delimiter}${key}${delimiter}`;
       }
 
       $cooked.find(VALID_TAGS).each((index, elem) => {
@@ -58,7 +59,7 @@
         }
 
         mapping.forEach(m => {
-          if (m.pattern !== `${DELIMITER}${key}${DELIMITER}`) {
+          if (m.pattern !== `${delimiter}${key}${delimiter}`) {
             m.position = m.position + diff;
             return;
           }
@@ -98,23 +99,27 @@
     }
 
     function processPlaceholders(placeholders, $cooked, mappings) {
-      const keys = Object.keys(placeholders);
-      const pattern = `(${DELIMITER}(?:${keys.join("|")})${DELIMITER})`;
-      const regex = new RegExp(pattern, "g");
+      mappings.length = 0;
 
-      $cooked.find(VALID_TAGS).each((index, elem) => {
-        const innerHTML = elem.innerHTML;
-        let match;
+      Object.keys(placeholders).map(placeholderKey => {
+        const placeholder = placeholders[placeholderKey];
+        const pattern = `(${placeholder.delimiter}(?:${placeholderKey})${placeholder.delimiter})`;
+        const regex = new RegExp(pattern, "g");
 
-        mappings[index] = mappings[index] || [];
+        $cooked.find(VALID_TAGS).each((index, elem) => {
+          const innerHTML = elem.innerHTML;
+          let match;
 
-        while ((match = regex.exec(innerHTML)) != null) {
-          mappings[index].push({
-            pattern: match[1],
-            position: match.index,
-            length: match[1].length
-          });
-        }
+          mappings[index] = mappings[index] || [];
+
+          while ((match = regex.exec(innerHTML)) != null) {
+            mappings[index].push({
+              pattern: match[1],
+              position: match.index,
+              length: match[1].length
+            });
+          }
+        });
       });
     }
 
@@ -133,10 +138,12 @@
       const defaultValue = valueFromCookie || elem.dataset.default;
       const defaultValues = (elem.dataset.defaults || "").split(",").filter(x => x);
       const description = elem.dataset.description;
+      const delimiter = elem.dataset.delimiter || DELIMITER;
 
       placeholders[dataKey] = {
         default: defaultValue,
         defaults: defaultValues,
+        delimiter,
         description
       }
 
@@ -151,6 +158,7 @@
         const select = document.createElement("select");
         select.classList.add("discourse-placeholder-select")
         select.dataset.key = dataKey;
+        select.dataset.delimiter = delimiter;
 
         if (description) {
           addSelectOption(select, { value: "none", description });
@@ -168,6 +176,7 @@
         const input = document.createElement("input");
         input.classList.add("discourse-placeholder-value")
         input.dataset.key = dataKey;
+        input.dataset.delimiter = delimiter;
 
         if (description) {
           input.setAttribute("placeholder", description);
@@ -214,7 +223,7 @@
 
         processChange(
           $cooked,
-          { target: { value, dataset: { key: placeholderKey } } },
+          { target: { value, dataset: { key: placeholderKey, delimiter: placeholder.delimiter } } },
           mappings
         );
       });
