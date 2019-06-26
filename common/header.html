@@ -101,25 +101,26 @@
     function processPlaceholders(placeholders, $cooked, mappings) {
       mappings.length = 0;
 
-      Object.keys(placeholders).map(placeholderKey => {
-        const placeholder = placeholders[placeholderKey];
-        const pattern = `(${placeholder.delimiter}(?:${placeholderKey})${placeholder.delimiter})`;
-        const regex = new RegExp(pattern, "g");
+      const keys = Object.keys(placeholders);
+      const pattern = keys.map(key => {
+        const placeholder = placeholders[key];
+        return `(${placeholder.delimiter}${key}${placeholder.delimiter})`;
+      }).join("|");
+      const regex = new RegExp(pattern, "g");
 
-        $cooked.find(VALID_TAGS).each((index, elem) => {
-          const innerHTML = elem.innerHTML;
-          let match;
+      $cooked.find(VALID_TAGS).each((index, elem) => {
+        const innerHTML = elem.innerHTML;
+        let match;
 
-          mappings[index] = mappings[index] || [];
+        mappings[index] = mappings[index] || [];
 
-          while ((match = regex.exec(innerHTML)) != null) {
-            mappings[index].push({
-              pattern: match[1],
-              position: match.index,
-              length: match[1].length
-            });
-          }
-        });
+        while ((match = regex.exec(innerHTML)) != null) {
+         mappings[index].push({
+           pattern: match[0],
+           position: match.index,
+           length: match[0].length
+         });
+        }
       });
     }
 
