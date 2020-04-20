@@ -3,7 +3,8 @@ import showModal from "discourse/lib/show-modal";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { later, debounce } from "@ember/runloop";
 
-const VALID_TAGS = "h1, h2, h3, h4, h5, h6, p, code, blockquote, .md-table, li";
+const VALID_TAGS =
+  'h1, h2, h3, h4, h5, h6, p > *:not([data-wrap="placeholder"]), code, blockquote, .md-table, li > *:not([data-wrap="placeholder"])';
 const DELIMITER = "=";
 
 function buildPlaceholderUI(element, clearButton, placeholderNodes) {
