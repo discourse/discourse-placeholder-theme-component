@@ -112,11 +112,13 @@ export default {
           function processChange(inputEvent) {
             const value = inputEvent.target.value;
             const key = inputEvent.target.dataset.key;
-            const delimiter = inputEvent.target.dataset.delimiter;
+            const placeholder = placeholders[inputEvent.target.dataset.key];
             const placeholderIdentifier = `${postIdentifier}${key}`;
 
             if (value) {
-              $.cookie(placeholderIdentifier, value);
+              if (value !== placeholder.default) {
+                $.cookie(placeholderIdentifier, value);
+              }
             } else {
               $.removeCookie(placeholderIdentifier);
             }
@@ -126,7 +128,7 @@ export default {
               newValue = value;
               clearButton.disabled = false;
             } else {
-              newValue = `${delimiter}${key}${delimiter}`;
+              newValue = `${placeholder.delimiter}${key}${placeholder.delimiter}`;
             }
 
             $cooked.find(VALID_TAGS).each((index, elem) => {
@@ -139,7 +141,10 @@ export default {
               let newInnnerHTML = elem.innerHTML;
 
               mapping.forEach(m => {
-                if (m.pattern !== `${delimiter}${key}${delimiter}`) {
+                if (
+                  m.pattern !==
+                  `${placeholder.delimiter}${key}${placeholder.delimiter}`
+                ) {
                   m.position = m.position + diff;
                   return;
                 }
@@ -198,7 +203,8 @@ export default {
               Object.keys(placeholders).forEach(placeholderKey => {
                 const placeholder = placeholders[placeholderKey];
                 const placeholderIdentifier = `${postIdentifier}${placeholderKey}`;
-                const value = $.cookie(placeholderIdentifier);
+                const value =
+                  $.cookie(placeholderIdentifier) || placeholder.default;
 
                 if (value) {
                   clearButton.disabled = false;
