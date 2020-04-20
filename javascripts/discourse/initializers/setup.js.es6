@@ -227,6 +227,18 @@ export default {
                 node.value =
                   node.parentNode.dataset.default ||
                   (node.tagName === "SELECT" ? "none" : "");
+
+                processChange({
+                  target: {
+                    value:
+                      node.parentNode.dataset.default ||
+                      (node.tagName === "SELECT" ? "none" : ""),
+                    dataset: {
+                      key: node.dataset.key,
+                      delimiter: node.dataset.delimiter
+                    }
+                  }
+                });
               });
 
             event.target.disabled = true;
@@ -284,10 +296,10 @@ export default {
 
           $cooked
             .on("input", ".discourse-placeholder-value", inputEvent =>
-              debounce(this, processChange, inputEvent, 250)
+              debounce(this, processChange, inputEvent, 150)
             )
             .on("change", ".discourse-placeholder-select", inputEvent =>
-              debounce(this, processChange, inputEvent, 250)
+              debounce(this, processChange, inputEvent, 150)
             );
 
           later(_fillPlaceholders, 500);
