@@ -1,0 +1,60 @@
+{{#d-modal-body
+  title=(theme-prefix "builder.title")
+  class="discourse-placeholder-builder"
+  style="overflow: auto"}}
+  <form>
+    <div class="control">
+      <span class="label">
+        {{theme-i18n "builder.key.label"}}
+      </span>
+      <div class="input">
+        {{input
+          value=(readonly form.key)
+          input=(action (mut form.key) value="target.value")
+        }}
+      </div>
+      <p class="description">{{theme-i18n "builder.key.description"}}</p>
+    </div>
+
+    <div class="control">
+      <span class="label">
+        {{theme-i18n "builder.description.label"}}
+      </span>
+      <div class="input">
+        {{input
+          value=(readonly form.description)
+          input=(action (mut form.description) value="target.value")
+        }}
+      </div>
+      <p class="description">{{theme-i18n "builder.description.description"}}</p>
+    </div>
+
+    <div class="control">
+      <span class="label">
+        {{theme-i18n "builder.values.label"}}
+      </span>
+      <div class="input">
+        {{multi-select
+          valueProperty=null
+          nameProperty=null
+          value=form.values
+          content=form.values
+          options=(hash
+            allowAny=true
+            placementStrategy="absolute"
+          )
+          onChange=(action (mut form.values))
+        }}
+      </div>
+      <p class="description">{{theme-i18n "builder.values.description"}}</p>
+    </div>
+  </form>
+{{/d-modal-body}}
+
+<div class="modal-footer discourse-local-dates-create-modal-footer">
+  {{d-button
+    class="btn-primary"
+    action=(action "insertPlaceholder")
+    label=(theme-prefix "builder.insert")
+  }}
+</div>

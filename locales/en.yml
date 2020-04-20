@@ -1,0 +1,17 @@
+en:
+  toolbar:
+    builder: "Add Placeholder"
+  builder:
+    errors:
+      no_key: "A key is required."
+    title: "Add Placeholder"
+    insert: "Insert"
+    key:
+      label: "Key"
+      description: "The =Key= to be replaced in the post."
+    description:
+      label: "Description"
+      description: "Description displayed on input with no value set."
+    values:
+      label: "Default value(s)"
+      description: "Optional value(s) for your placeholder, if multiple values are defined, a select will be used."

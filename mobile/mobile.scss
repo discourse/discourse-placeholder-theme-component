@@ -1,0 +1,23 @@
+.placeholder-ui {
+  flex-direction: column;
+
+  .placeholders-container {
+    max-width: 100%;
+  }
+}
+
+.d-wrap[data-wrap="placeholder"] {
+  .discourse-placeholder-name {
+    width: 50%;
+    min-width: auto;
+  }
+
+  p {
+    max-width: 40%;
+  }
+
+  .discourse-placeholder-value,
+  .discourse-placeholder-select {
+    width: 100%;
+  }
+}
