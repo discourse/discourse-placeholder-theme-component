@@ -1,4 +1,3 @@
-import { iconHTML } from "discourse-common/lib/icon-library";
 import showModal from "discourse/lib/show-modal";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { later, debounce } from "@ember/runloop";
@@ -6,26 +5,6 @@ import { later, debounce } from "@ember/runloop";
 const VALID_TAGS =
   'h1, h2, h3, h4, h5, h6, p > *:not([data-wrap="placeholder"]), code, blockquote, .md-table, li > *:not([data-wrap="placeholder"])';
 const DELIMITER = "=";
-
-function buildPlaceholderUI(element, clearButton, placeholderNodes) {
-  const ui = document.createElement("div");
-  ui.classList.add("placeholder-ui");
-
-  const placeholdersContainer = document.createElement("div");
-  placeholdersContainer.classList.add("placeholders-container");
-
-  placeholderNodes.forEach(placeholderNode => {
-    const link = document.createElement("a");
-    link.href = `#placeholder-key-${placeholderNode.dataset.key}`;
-    link.innerText = placeholderNode.dataset.key;
-    placeholdersContainer.append(link);
-  });
-
-  ui.appendChild(placeholdersContainer);
-  ui.appendChild(clearButton);
-
-  return ui;
-}
 
 function buildInput(key, placeholder) {
   const input = document.createElement("input");
@@ -80,20 +59,6 @@ function buildSelect(key, placeholder) {
   return select;
 }
 
-function buildClearButton() {
-  const clearButton = document.createElement("button");
-  clearButton.innerHTML = iconHTML("trash-alt");
-  clearButton.classList.add(
-    "clear-placeholder",
-    "btn",
-    "no-text",
-    "btn-default",
-    "btn-primary"
-  );
-  clearButton.disabled = true;
-  return clearButton;
-}
-
 export default {
   name: "discourse-placeholder-theme-component",
 
@@ -104,8 +69,6 @@ export default {
           if (!postWidget) return;
 
           const postIdentifier = `d-placeholder-${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-`;
-          const clearButton = buildClearButton();
-          clearButton.addEventListener("click", _clearPlaceholders);
           const mappings = [];
           const placeholders = {};
 
@@ -126,7 +89,6 @@ export default {
             let newValue;
             if (value && value.length && value !== "none") {
               newValue = value;
-              clearButton.disabled = false;
             } else {
               newValue = `${placeholder.delimiter}${key}${placeholder.delimiter}`;
             }
@@ -206,10 +168,6 @@ export default {
                 const value =
                   $.cookie(placeholderIdentifier) || placeholder.default;
 
-                if (value) {
-                  clearButton.disabled = false;
-                }
-
                 processChange({
                   target: {
                     value,
@@ -223,49 +181,14 @@ export default {
             }
           }
 
-          function _clearPlaceholders(event) {
-            $cooked[0]
-              .querySelectorAll(
-                ".discourse-placeholder-value, .discourse-placeholder-select"
-              )
-              .forEach(node => {
-                $.removeCookie(`${postIdentifier}${node.dataset.key}`);
-                node.value =
-                  node.parentNode.dataset.default ||
-                  (node.tagName === "SELECT" ? "none" : "");
-
-                processChange({
-                  target: {
-                    value:
-                      node.parentNode.dataset.default ||
-                      (node.tagName === "SELECT" ? "none" : ""),
-                    dataset: {
-                      key: node.dataset.key,
-                      delimiter: node.dataset.delimiter
-                    }
-                  }
-                });
-              });
-
-            event.target.disabled = true;
-          }
-
           const placeholderNodes = $cooked[0].querySelectorAll(
             ".d-wrap[data-wrap=placeholder]:not(.placeholdered)"
           );
-
-          if (placeholderNodes.length) {
-            $cooked[0].prepend(
-              buildPlaceholderUI($cooked[0], clearButton, placeholderNodes)
-            );
-          }
 
           placeholderNodes.forEach(elem => {
             const dataKey = elem.dataset.key;
 
             if (!dataKey) return;
-
-            elem.id = `placeholder-key-${dataKey}`;
 
             const placeholderIdentifier = `${postIdentifier}${dataKey}`;
             const valueFromCookie = $.cookie(placeholderIdentifier);
