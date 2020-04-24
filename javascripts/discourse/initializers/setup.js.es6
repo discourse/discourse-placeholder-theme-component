@@ -3,7 +3,7 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import { later, debounce } from "@ember/runloop";
 
 const VALID_TAGS =
-  'h1, h2, h3, h4, h5, h6, p > *:not([data-wrap="placeholder"]), code, blockquote, .md-table, li > *:not([data-wrap="placeholder"])';
+  "h1, h2, h3, h4, h5, h6, p, code, blockquote, .md-table, li p";
 const DELIMITER = "=";
 
 function buildInput(key, placeholder) {
