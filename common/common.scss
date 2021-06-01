@@ -23,7 +23,7 @@ div.d-wrap[data-wrap="placeholder"] {
   p,
   .discourse-placeholder-name {
     font-size: $font-down-1;
-    color: dark-light-choose($primary-high, $secondary-low);
+    color: var(--primary-low-mid-or-secondary-high);
   }
 
   p {
