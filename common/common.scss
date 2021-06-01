@@ -7,7 +7,7 @@ div.d-wrap[data-wrap="placeholder"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-left: 5px solid $primary-low;
+  border-left: 5px solid var(--primary-low);
   background-color: blend-primary-secondary(5%);
 
   .discourse-placeholder-name {
@@ -42,18 +42,18 @@ div.d-wrap[data-wrap="placeholder"] {
     width: 350px;
     padding: 0.5em;
     line-height: $line-height-small;
-    color: $primary;
-    background-color: $secondary;
-    border: 1px solid $primary-medium;
+    color: var(--primary);
+    background-color: var(--secondary);
+    border: 1px solid var(--primary-medium);
   }
 
   .discourse-placeholder-select {
     width: 350px;
     margin: 0.5em 0;
     line-height: $line-height-small;
-    color: $primary;
-    background-color: $secondary;
-    border: 1px solid $primary-medium;
+    color: var(--primary);
+    background-color: var(--secondary);
+    border: 1px solid var(--primary-medium);
   }
 }
 
@@ -71,7 +71,7 @@ div.d-wrap[data-wrap="placeholder"] {
 
   .description {
     font-size: $font-down-1;
-    color: $primary-medium;
+    color: var(--primary-medium);
     margin: 0.25em 0 1em 0;
   }
 }
