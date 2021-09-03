@@ -245,6 +245,8 @@ export default {
       });
 
       api.modifyClass("controller:composer", {
+        pluginId: "discourse-placeholder-theme-component",
+
         actions: {
           insertPlaceholder() {
             showModal("discourse-placeholder-builder", {
