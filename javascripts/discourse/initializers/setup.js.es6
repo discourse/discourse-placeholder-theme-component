@@ -1,6 +1,7 @@
 import showModal from "discourse/lib/show-modal";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { later, debounce } from "@ember/runloop";
+import cookie, { removeCookie } from "discourse/lib/cookie";
 
 const VALID_TAGS =
   "h1, h2, h3, h4, h5, h6, p, code, blockquote, .md-table, li p";
@@ -80,10 +81,10 @@ export default {
 
             if (value) {
               if (value !== placeholder.default) {
-                $.cookie(placeholderIdentifier, value);
+                cookie(placeholderIdentifier, value);
               }
             } else {
-              $.removeCookie(placeholderIdentifier);
+              removeCookie(placeholderIdentifier);
             }
 
             let newValue;
@@ -166,7 +167,7 @@ export default {
                 const placeholder = placeholders[placeholderKey];
                 const placeholderIdentifier = `${postIdentifier}${placeholderKey}`;
                 const value =
-                  $.cookie(placeholderIdentifier) || placeholder.default;
+                  cookie(placeholderIdentifier) || placeholder.default;
 
                 processChange({
                   target: {
@@ -191,7 +192,7 @@ export default {
             if (!dataKey) return;
 
             const placeholderIdentifier = `${postIdentifier}${dataKey}`;
-            const valueFromCookie = $.cookie(placeholderIdentifier);
+            const valueFromCookie = cookie(placeholderIdentifier);
             const defaultValues = (elem.dataset.defaults || "")
               .split(",")
               .filter(Boolean);
