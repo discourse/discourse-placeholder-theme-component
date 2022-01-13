@@ -128,8 +128,8 @@ export default {
     this.expireOldValues();
 
     withPluginApi("0.8.7", (api) => {
-      api.decorateCooked(
-        ($cooked, postWidget) => {
+      api.decorateCookedElement(
+        (cooked, postWidget) => {
           if (!postWidget) return;
 
           const postIdentifier = `${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-`;
@@ -157,7 +157,7 @@ export default {
               newValue = `${placeholder.delimiter}${key}${placeholder.delimiter}`;
             }
 
-            $cooked.find(VALID_TAGS).each((index, elem) => {
+            cooked.querySelectorAll(VALID_TAGS).forEach((elem, index) => {
               const mapping = mappings[index];
 
               if (!mapping) return;
@@ -206,7 +206,7 @@ export default {
               .join("|");
             const regex = new RegExp(pattern, "g");
 
-            $cooked.find(VALID_TAGS).each((index, elem) => {
+            cooked.querySelectorAll(VALID_TAGS).forEach((elem, index) => {
               let match;
 
               mappings[index] = mappings[index] || [];
@@ -223,7 +223,7 @@ export default {
 
           const _fillPlaceholders = () => {
             if (Object.keys(placeholders).length > 0) {
-              processPlaceholders(placeholders, $cooked, mappings);
+              processPlaceholders(placeholders, cooked, mappings);
 
               // trigger fake event to setup initial state
               Object.keys(placeholders).forEach((placeholderKey) => {
@@ -245,7 +245,7 @@ export default {
             }
           };
 
-          const placeholderNodes = $cooked[0].querySelectorAll(
+          const placeholderNodes = cooked.querySelectorAll(
             ".d-wrap[data-wrap=placeholder]:not(.placeholdered)"
           );
 
@@ -287,13 +287,16 @@ export default {
             }
           });
 
-          $cooked
-            .on("input", ".discourse-placeholder-value", (inputEvent) =>
-              debounce(this, processChange, inputEvent, 150)
-            )
-            .on("change", ".discourse-placeholder-select", (inputEvent) =>
-              debounce(this, processChange, inputEvent, 150)
-            );
+          cooked
+            .querySelectorAll(".discourse-placeholder-value")
+            .forEach((el) => {
+              el.addEventListener("input", (inputEvent) =>
+                debounce(this, processChange, inputEvent, 150)
+              );
+              el.addEventListener("change", (inputEvent) =>
+                debounce(this, processChange, inputEvent, 150)
+              );
+            });
 
           later(_fillPlaceholders, 500);
         },
