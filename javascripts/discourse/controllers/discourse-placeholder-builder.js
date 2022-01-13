@@ -12,7 +12,7 @@ export default Controller.extend(ModalFunctionality, {
       EmberObject.create({
         key: null,
         description: null,
-        values: []
+        values: [],
       })
     );
   },
@@ -43,5 +43,5 @@ export default Controller.extend(ModalFunctionality, {
     this.model.toolbarEvent.addText(`${output}][/wrap]`);
 
     this.send("closeModal");
-  }
+  },
 });

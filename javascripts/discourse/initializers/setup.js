@@ -46,14 +46,14 @@ function buildSelect(key, placeholder) {
   if (placeholder.description) {
     addSelectOption(select, {
       value: "none",
-      description: placeholder.description
+      description: placeholder.description,
     });
   }
 
-  placeholder.defaults.forEach(value =>
+  placeholder.defaults.forEach((value) =>
     addSelectOption(select, {
       value,
-      selected: placeholder.default === value
+      selected: placeholder.default === value,
     })
   );
 
@@ -64,7 +64,7 @@ export default {
   name: "discourse-placeholder-theme-component",
 
   initialize() {
-    withPluginApi("0.8.7", api => {
+    withPluginApi("0.8.7", (api) => {
       api.decorateCooked(
         ($cooked, postWidget) => {
           if (!postWidget) return;
@@ -103,7 +103,7 @@ export default {
               let replaced = false;
               let newInnnerHTML = elem.innerHTML;
 
-              mapping.forEach(m => {
+              mapping.forEach((m) => {
                 if (
                   m.pattern !==
                   `${placeholder.delimiter}${key}${placeholder.delimiter}`
@@ -136,7 +136,7 @@ export default {
 
             const keys = Object.keys(placeholders);
             const pattern = keys
-              .map(key => {
+              .map((key) => {
                 const placeholder = placeholders[key];
                 return `(${placeholder.delimiter}${key}${placeholder.delimiter})`;
               })
@@ -152,7 +152,7 @@ export default {
                 mappings[index].push({
                   pattern: match[0],
                   position: match.index,
-                  length: match[0].length
+                  length: match[0].length,
                 });
               }
             });
@@ -163,7 +163,7 @@ export default {
               processPlaceholders(placeholders, $cooked, mappings);
 
               // trigger fake event to setup initial state
-              Object.keys(placeholders).forEach(placeholderKey => {
+              Object.keys(placeholders).forEach((placeholderKey) => {
                 const placeholder = placeholders[placeholderKey];
                 const placeholderIdentifier = `${postIdentifier}${placeholderKey}`;
                 const value =
@@ -174,9 +174,9 @@ export default {
                     value,
                     dataset: {
                       key: placeholderKey,
-                      delimiter: placeholder.delimiter
-                    }
-                  }
+                      delimiter: placeholder.delimiter,
+                    },
+                  },
                 });
               });
             }
@@ -186,7 +186,7 @@ export default {
             ".d-wrap[data-wrap=placeholder]:not(.placeholdered)"
           );
 
-          placeholderNodes.forEach(elem => {
+          placeholderNodes.forEach((elem) => {
             const dataKey = elem.dataset.key;
 
             if (!dataKey) return;
@@ -201,7 +201,7 @@ export default {
               default: valueFromCookie || elem.dataset.default,
               defaults: defaultValues,
               delimiter: elem.dataset.delimiter || DELIMITER,
-              description: elem.dataset.description
+              description: elem.dataset.description,
             };
 
             const span = document.createElement("span");
@@ -225,10 +225,10 @@ export default {
           });
 
           $cooked
-            .on("input", ".discourse-placeholder-value", inputEvent =>
+            .on("input", ".discourse-placeholder-value", (inputEvent) =>
               debounce(this, processChange, inputEvent, 150)
             )
-            .on("change", ".discourse-placeholder-select", inputEvent =>
+            .on("change", ".discourse-placeholder-select", (inputEvent) =>
               debounce(this, processChange, inputEvent, 150)
             );
 
@@ -241,7 +241,7 @@ export default {
         return {
           action: "insertPlaceholder",
           icon: "file",
-          label: themePrefix("toolbar.builder")
+          label: themePrefix("toolbar.builder"),
         };
       });
 
@@ -252,12 +252,12 @@ export default {
           insertPlaceholder() {
             showModal("discourse-placeholder-builder", {
               model: {
-                toolbarEvent: this.toolbarEvent
-              }
+                toolbarEvent: this.toolbarEvent,
+              },
             });
-          }
-        }
+          },
+        },
       });
     });
-  }
+  },
 };
