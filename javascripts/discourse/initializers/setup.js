@@ -6,6 +6,9 @@ import cookie, { removeCookie } from "discourse/lib/cookie";
 const VALID_TAGS =
   "h1, h2, h3, h4, h5, h6, p, code, blockquote, .md-table, li p";
 const DELIMITER = "=";
+const EXPIRE_AFTER_DAYS = 7;
+const EXPIRE_AFTER_SECONDS = EXPIRE_AFTER_DAYS * 24 * 60 * 60;
+const STORAGE_PREFIX = "d-placeholder-";
 
 function buildInput(key, placeholder) {
   const input = document.createElement("input");
@@ -63,17 +66,77 @@ function buildSelect(key, placeholder) {
 export default {
   name: "discourse-placeholder-theme-component",
 
-  initialize() {
+  // TODO: Remove once this change has been live for a few months
+  migrateCookiesToKeyValueStore() {
+    const cookies = document.cookie.split("; ");
+    const oldPlaceholderCookies = [];
+
+    for (let i = 0, l = cookies.length; i < l; i++) {
+      let parts = cookies[i].split("=");
+      if (parts[0].startsWith(STORAGE_PREFIX)) {
+        oldPlaceholderCookies.push(parts[0]);
+      }
+    }
+
+    for (const key of oldPlaceholderCookies) {
+      const value = cookie(key);
+
+      this.setValue(key, value);
+      removeCookie(key);
+    }
+  },
+
+  expireOldValues() {
+    const now = Date.now();
+    Object.keys(window.localStorage)
+      .filter((k) => k.startsWith(STORAGE_PREFIX))
+      .forEach((k) => {
+        const data = this.keyValueStore.getObject(k);
+        if (!data?.expires || data.expires < now) {
+          this.removeValue(k);
+        }
+      });
+  },
+
+  getValue(key) {
+    const data = this.keyValueStore.getObject(`${STORAGE_PREFIX}${key}`);
+    if (data) {
+      data.expires = Date.now() + EXPIRE_AFTER_SECONDS;
+      this.keyValueStore.setObject(`${STORAGE_PREFIX}${key}`, data);
+      return data.value;
+    }
+  },
+
+  setValue(key, value) {
+    this.keyValueStore.setObject({
+      key: `${STORAGE_PREFIX}${key}`,
+      value: {
+        expires: Date.now() + EXPIRE_AFTER_SECONDS,
+        value: value,
+      },
+    });
+  },
+
+  removeValue(key) {
+    this.keyValueStore.remove(`${STORAGE_PREFIX}${key}`);
+  },
+
+  initialize(container) {
+    this.keyValueStore = container.lookup("key-value-store:main");
+
+    this.migrateCookiesToKeyValueStore();
+    this.expireOldValues();
+
     withPluginApi("0.8.7", (api) => {
       api.decorateCooked(
         ($cooked, postWidget) => {
           if (!postWidget) return;
 
-          const postIdentifier = `d-placeholder-${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-`;
+          const postIdentifier = `${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-`;
           const mappings = [];
           const placeholders = {};
 
-          function processChange(inputEvent) {
+          const processChange = (inputEvent) => {
             const value = inputEvent.target.value;
             const key = inputEvent.target.dataset.key;
             const placeholder = placeholders[inputEvent.target.dataset.key];
@@ -81,10 +144,10 @@ export default {
 
             if (value) {
               if (value !== placeholder.default) {
-                cookie(placeholderIdentifier, value);
+                this.setValue(placeholderIdentifier, value);
               }
             } else {
-              removeCookie(placeholderIdentifier);
+              this.removeValue(placeholderIdentifier);
             }
 
             let newValue;
@@ -129,7 +192,7 @@ export default {
 
               if (replaced) elem.innerHTML = newInnnerHTML;
             });
-          }
+          };
 
           function processPlaceholders() {
             mappings.length = 0;
@@ -158,7 +221,7 @@ export default {
             });
           }
 
-          function _fillPlaceholders() {
+          const _fillPlaceholders = () => {
             if (Object.keys(placeholders).length > 0) {
               processPlaceholders(placeholders, $cooked, mappings);
 
@@ -167,7 +230,7 @@ export default {
                 const placeholder = placeholders[placeholderKey];
                 const placeholderIdentifier = `${postIdentifier}${placeholderKey}`;
                 const value =
-                  cookie(placeholderIdentifier) || placeholder.default;
+                  this.getValue(placeholderIdentifier) || placeholder.default;
 
                 processChange({
                   target: {
@@ -180,7 +243,7 @@ export default {
                 });
               });
             }
-          }
+          };
 
           const placeholderNodes = $cooked[0].querySelectorAll(
             ".d-wrap[data-wrap=placeholder]:not(.placeholdered)"
@@ -192,13 +255,13 @@ export default {
             if (!dataKey) return;
 
             const placeholderIdentifier = `${postIdentifier}${dataKey}`;
-            const valueFromCookie = cookie(placeholderIdentifier);
+            const valueFromStore = this.getValue(placeholderIdentifier);
             const defaultValues = (elem.dataset.defaults || "")
               .split(",")
               .filter(Boolean);
 
             placeholders[dataKey] = {
-              default: valueFromCookie || elem.dataset.default,
+              default: valueFromStore || elem.dataset.default,
               defaults: defaultValues,
               delimiter: elem.dataset.delimiter || DELIMITER,
               description: elem.dataset.description,
