@@ -293,6 +293,11 @@ export default {
               el.addEventListener("input", (inputEvent) =>
                 debounce(this, processChange, inputEvent, 150)
               );
+            });
+
+          cooked
+            .querySelectorAll(".discourse-placeholder-select")
+            .forEach((el) => {
               el.addEventListener("change", (inputEvent) =>
                 debounce(this, processChange, inputEvent, 150)
               );
