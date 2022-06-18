@@ -1,6 +1,6 @@
 import showModal from "discourse/lib/show-modal";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { later, debounce } from "@ember/runloop";
+import { debounce, later } from "@ember/runloop";
 import cookie, { removeCookie } from "discourse/lib/cookie";
 
 const VALID_TAGS =
@@ -112,7 +112,7 @@ export default {
       key: `${STORAGE_PREFIX}${key}`,
       value: {
         expires: Date.now() + EXPIRE_AFTER_SECONDS,
-        value: value,
+        value,
       },
     });
   },
@@ -130,7 +130,9 @@ export default {
     withPluginApi("0.8.7", (api) => {
       api.decorateCookedElement(
         (cooked, postWidget) => {
-          if (!postWidget) return;
+          if (!postWidget) {
+            return;
+          }
 
           const postIdentifier = `${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-`;
           const mappings = [];
@@ -160,7 +162,9 @@ export default {
             cooked.querySelectorAll(VALID_TAGS).forEach((elem, index) => {
               const mapping = mappings[index];
 
-              if (!mapping) return;
+              if (!mapping) {
+                return;
+              }
 
               let diff = 0;
               let replaced = false;
@@ -190,7 +194,9 @@ export default {
                 diff = diff + newValue.length - previousLength;
               });
 
-              if (replaced) elem.innerHTML = newInnnerHTML;
+              if (replaced) {
+                elem.innerHTML = newInnnerHTML;
+              }
             });
           };
 
@@ -252,7 +258,9 @@ export default {
           placeholderNodes.forEach((elem) => {
             const dataKey = elem.dataset.key;
 
-            if (!dataKey) return;
+            if (!dataKey) {
+              return;
+            }
 
             const placeholderIdentifier = `${postIdentifier}${dataKey}`;
             const valueFromStore = this.getValue(placeholderIdentifier);

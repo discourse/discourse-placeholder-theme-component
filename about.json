@@ -1,6 +1,6 @@
 {
   "name": "discourse-placeholder-theme-component",
+  "component": true,
   "about_url": "https://github.com/discourse/discourse-placeholder-theme-component",
-  "license_url": "https://github.com/discourse/discourse-placeholder-theme-component/blob/main/LICENSE",
-  "component": true
+  "license_url": "https://github.com/discourse/discourse-placeholder-theme-component/blob/main/LICENSE"
 }

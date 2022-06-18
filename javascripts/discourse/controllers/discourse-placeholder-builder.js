@@ -2,6 +2,8 @@ import Controller from "@ember/controller";
 import ModalFunctionality from "discourse/mixins/modal-functionality";
 import EmberObject, { action } from "@ember/object";
 import { isBlank } from "@ember/utils";
+import I18n from "I18n";
+import bootbox from "bootbox";
 
 export default Controller.extend(ModalFunctionality, {
   form: null,
