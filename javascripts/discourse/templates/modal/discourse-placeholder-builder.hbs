@@ -1,7 +1,8 @@
 {{#d-modal-body
   title=(theme-prefix "builder.title")
   class="discourse-placeholder-builder"
-  style="overflow: auto"}}
+  style="overflow: auto"
+}}
   <form>
     <div class="control">
       <span class="label">
@@ -26,7 +27,11 @@
           input=(action (mut form.description) value="target.value")
         }}
       </div>
-      <p class="description">{{theme-i18n "builder.description.description"}}</p>
+      <p class="description">
+        {{theme-i18n
+          "builder.description.description"
+        }}
+      </p>
     </div>
 
     <div class="control">
@@ -39,10 +44,7 @@
           nameProperty=null
           value=form.values
           content=form.values
-          options=(hash
-            allowAny=true
-            placementStrategy="absolute"
-          )
+          options=(hash allowAny=true placementStrategy="absolute")
           onChange=(action (mut form.values))
         }}
       </div>
