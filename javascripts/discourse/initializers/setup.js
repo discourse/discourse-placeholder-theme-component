@@ -168,7 +168,7 @@ export default {
 
               let diff = 0;
               let replaced = false;
-              let newInnnerHTML = elem.innerHTML;
+              let newInnerHTML = elem.innerHTML;
 
               mapping.forEach((m) => {
                 if (
@@ -182,12 +182,12 @@ export default {
                 replaced = true;
 
                 const previousLength = m.length;
-                const prefix = newInnnerHTML.slice(0, m.position + diff);
-                const suffix = newInnnerHTML.slice(
+                const prefix = newInnerHTML.slice(0, m.position + diff);
+                const suffix = newInnerHTML.slice(
                   m.position + diff + m.length,
-                  newInnnerHTML.length
+                  newInnerHTML.length
                 );
-                newInnnerHTML = `${prefix}${newValue}${suffix}`;
+                newInnerHTML = `${prefix}${newValue}${suffix}`;
 
                 m.length = newValue.length;
                 m.position = m.position + diff;
@@ -195,7 +195,7 @@ export default {
               });
 
               if (replaced) {
-                elem.innerHTML = newInnnerHTML;
+                elem.innerHTML = newInnerHTML;
               }
             });
           };
