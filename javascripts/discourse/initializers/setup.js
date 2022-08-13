@@ -122,7 +122,7 @@ export default {
   },
 
   initialize(container) {
-    this.keyValueStore = container.lookup("key-value-store:main");
+    this.keyValueStore = container.lookup("service:key-value-store");
 
     this.migrateCookiesToKeyValueStore();
     this.expireOldValues();
