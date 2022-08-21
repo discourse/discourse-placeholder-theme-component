@@ -66,36 +66,15 @@ function buildSelect(key, placeholder) {
 export default {
   name: "discourse-placeholder-theme-component",
 
-  // TODO: Remove once this change has been live for a few months
-  migrateCookiesToKeyValueStore() {
-    const cookies = document.cookie.split("; ");
-    const oldPlaceholderCookies = [];
-
-    for (let i = 0, l = cookies.length; i < l; i++) {
-      let parts = cookies[i].split("=");
-      if (parts[0].startsWith(STORAGE_PREFIX)) {
-        oldPlaceholderCookies.push(parts[0]);
-      }
-    }
-
-    for (const key of oldPlaceholderCookies) {
-      const value = cookie(key);
-
-      this.setValue(key, value);
-      removeCookie(key);
-    }
-  },
-
   expireOldValues() {
     const now = Date.now();
-    Object.keys(window.localStorage)
-      .filter((k) => k.startsWith(STORAGE_PREFIX))
-      .forEach((k) => {
-        const data = this.keyValueStore.getObject(k);
-        if (!data?.expires || data.expires < now) {
-          this.removeValue(k);
-        }
-      });
+    this.keyValueStore.removeKeys?.((k, v) => {
+      if (!k.includes(STORAGE_PREFIX)) {
+        return false;
+      }
+
+      return !v?.expires || v.expires < now;
+    });
   },
 
   getValue(key) {
@@ -123,8 +102,6 @@ export default {
 
   initialize(container) {
     this.keyValueStore = container.lookup("service:key-value-store");
-
-    this.migrateCookiesToKeyValueStore();
     this.expireOldValues();
 
     withPluginApi("0.8.7", (api) => {
