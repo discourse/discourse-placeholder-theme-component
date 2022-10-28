@@ -3,9 +3,10 @@ import ModalFunctionality from "discourse/mixins/modal-functionality";
 import EmberObject, { action } from "@ember/object";
 import { isBlank } from "@ember/utils";
 import I18n from "I18n";
-import bootbox from "bootbox";
+import { inject as service } from "@ember/service";
 
 export default Controller.extend(ModalFunctionality, {
+  dialog: service(),
   form: null,
 
   onShow() {
@@ -24,7 +25,7 @@ export default Controller.extend(ModalFunctionality, {
   @action
   insertPlaceholder() {
     if (isBlank(this.form.key)) {
-      bootbox.alert(I18n.t(themePrefix("builder.errors.no_key")));
+      this.dialog.alert(I18n.t(themePrefix("builder.errors.no_key")));
       return;
     }
 
