@@ -292,25 +292,15 @@ export default {
         { onlyStream: true, id: "discourse-placeholder-theme-component" }
       );
 
-      api.addToolbarPopupMenuOptionsCallback(() => {
-        return {
-          action: "insertPlaceholder",
-          icon: "file",
-          label: themePrefix("toolbar.builder"),
-        };
-      });
-
-      api.modifyClass("controller:composer", {
-        pluginId: "discourse-placeholder-theme-component",
-
-        actions: {
-          insertPlaceholder() {
-            showModal("discourse-placeholder-builder", {
-              model: {
-                toolbarEvent: this.toolbarEvent,
-              },
-            });
-          },
+      api.addComposerToolbarPopupMenuOption({
+        label: themePrefix("toolbar.builder"),
+        icon: "file",
+        action: (toolbarEvent) => {
+          showModal("discourse-placeholder-builder", {
+            model: {
+              toolbarEvent,
+            },
+          });
         },
       });
     });
