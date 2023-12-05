@@ -57,14 +57,10 @@ div.d-wrap[data-wrap="placeholder"] {
   }
 }
 
-.discourse-placeholder-builder {
-  overflow: auto;
-
-  .input {
-    input {
-      margin: 0;
-      width: 100%;
-    }
+.placeholder-builder {
+  .input input {
+    margin: 0;
+    width: 100%;
   }
 
   .multi-select {

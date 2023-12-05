@@ -2,7 +2,7 @@
   @title={{i18n (theme-prefix "builder.title")}}
   @closeModal={{@closeModal}}
   @tagName="form"
-  class="discourse-placeholder-builder"
+  class="placeholder-builder"
 >
   <:body>
     <div class="control">
@@ -10,7 +10,11 @@
         {{theme-i18n "builder.key.label"}}
       </span>
       <div class="input">
-        <Input @value={{readonly form.key}} {{on "input" this.updateKey}} />
+        <Input
+          {{on "input" this.updateKey}}
+          @value={{readonly form.key}}
+          class="placeholder-builder__key"
+        />
       </div>
       <p class="description">{{theme-i18n "builder.key.description"}}</p>
     </div>
@@ -21,8 +25,9 @@
       </span>
       <div class="input">
         <Input
-          @value={{readonly form.description}}
           {{on "input" this.updateDescription}}
+          @value={{readonly form.description}}
+          class="placeholder-builder__description"
         />
       </div>
       <p class="description">
@@ -42,6 +47,7 @@
           @content={{form.values}}
           @options={{hash allowAny=true placementStrategy="absolute"}}
           @onChange={{fn (mut form.values)}}
+          class="placeholder-builder__default-values"
         />
       </div>
       <p class="description">{{theme-i18n "builder.values.description"}}</p>
