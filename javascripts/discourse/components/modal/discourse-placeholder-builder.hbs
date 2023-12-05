@@ -10,7 +10,7 @@
         {{theme-i18n "builder.key.label"}}
       </span>
       <div class="input">
-        <Input @value={{readonly form.key}} @input={{this.updateKey}} />
+        <Input @value={{readonly form.key}} {{on "input" this.updateKey}} />
       </div>
       <p class="description">{{theme-i18n "builder.key.description"}}</p>
     </div>
@@ -22,7 +22,7 @@
       <div class="input">
         <Input
           @value={{readonly form.description}}
-          @input={{this.updateDescription}}
+          {{on "input" this.updateDescription}}
         />
       </div>
       <p class="description">
