@@ -1,6 +1,6 @@
-import showModal from "discourse/lib/show-modal";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { debounce, later } from "@ember/runloop";
+import DiscoursePlaceholderBuilder from "../components/modal/discourse-placeholder-builder";
 
 const VALID_TAGS =
   "h1, h2, h3, h4, h5, h6, p, code, blockquote, .md-table, li p";
@@ -296,7 +296,8 @@ export default {
         label: themePrefix("toolbar.builder"),
         icon: "file",
         action: (toolbarEvent) => {
-          showModal("discourse-placeholder-builder", {
+          const modal = container.lookup("service:modal");
+          modal.show(DiscoursePlaceholderBuilder, {
             model: {
               toolbarEvent,
             },

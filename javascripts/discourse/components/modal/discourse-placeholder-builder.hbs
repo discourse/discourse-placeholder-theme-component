@@ -1,0 +1,64 @@
+<DModal
+  @title={{i18n (theme-prefix "builder.title")}}
+  @closeModal={{@closeModal}}
+  @tagName="form"
+  class="placeholder-builder"
+>
+  <:body>
+    <div class="control">
+      <span class="label">
+        {{theme-i18n "builder.key.label"}}
+      </span>
+      <div class="input">
+        <Input
+          {{on "input" this.updateKey}}
+          @value={{readonly form.key}}
+          class="placeholder-builder__key"
+        />
+      </div>
+      <p class="description">{{theme-i18n "builder.key.description"}}</p>
+    </div>
+
+    <div class="control">
+      <span class="label">
+        {{theme-i18n "builder.description.label"}}
+      </span>
+      <div class="input">
+        <Input
+          {{on "input" this.updateDescription}}
+          @value={{readonly form.description}}
+          class="placeholder-builder__description"
+        />
+      </div>
+      <p class="description">
+        {{theme-i18n "builder.description.description"}}
+      </p>
+    </div>
+
+    <div class="control">
+      <span class="label">
+        {{theme-i18n "builder.values.label"}}
+      </span>
+      <div class="input">
+        <MultiSelect
+          @valueProperty={{null}}
+          @nameProperty={{null}}
+          @value={{form.values}}
+          @content={{form.values}}
+          @options={{hash allowAny=true placementStrategy="absolute"}}
+          @onChange={{fn (mut form.values)}}
+          class="placeholder-builder__default-values"
+        />
+      </div>
+      <p class="description">{{theme-i18n "builder.values.description"}}</p>
+    </div>
+  </:body>
+
+  <:footer>
+    <DButton
+      @action={{this.insertPlaceholder}}
+      @label={{theme-prefix "builder.insert"}}
+      class="btn-primary"
+    />
+  </:footer>
+</DModal>
