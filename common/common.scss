@@ -22,7 +22,7 @@ div.d-wrap[data-wrap="placeholder"] {
 
   p,
   .discourse-placeholder-name {
-    font-size: $font-down-1;
+    font-size: var(--font-down-1);
     color: var(--primary-or-secondary);
   }
 
@@ -41,7 +41,7 @@ div.d-wrap[data-wrap="placeholder"] {
   .discourse-placeholder-value {
     width: 350px;
     padding: 0.5em;
-    line-height: $line-height-small;
+    line-height: var(--line-height-small);
     color: var(--primary);
     background-color: var(--secondary);
     border: 1px solid var(--primary-medium);
@@ -50,14 +50,16 @@ div.d-wrap[data-wrap="placeholder"] {
   .discourse-placeholder-select {
     width: 350px;
     margin: 0.5em 0;
-    line-height: $line-height-small;
+    line-height: var(--line-height-small);
     color: var(--primary);
     background-color: var(--secondary);
     border: 1px solid var(--primary-medium);
   }
 }
 
-.discourse-placeholder-builder-modal {
+.discourse-placeholder-builder {
+  overflow: auto;
+
   .input {
     input {
       margin: 0;
