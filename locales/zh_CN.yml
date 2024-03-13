@@ -1,0 +1,17 @@
+zh_CN:
+  toolbar:
+    builder: "添加占位符（Placeholder） "
+  builder:
+    errors:
+      no_key: "一个 key 是必须的"
+    title: "添加占位符（Placeholder）"
+    insert: "插入"
+    key:
+      label: "Key"
+      description: " =Key= 将会在主题中被替换。"
+    description:
+      label: "描述"
+      description: "描述（Description）将会在输入的时候显示，不会在值（value）中设定。"
+    values:
+      label: "默认值"
+      description: "你占位符使用的默认值。如果被定义多值的话，那么在选择（select）将会替换文本输入框使用。"
