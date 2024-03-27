@@ -1,5 +1,5 @@
-import { withPluginApi } from "discourse/lib/plugin-api";
 import { debounce, later } from "@ember/runloop";
+import { withPluginApi } from "discourse/lib/plugin-api";
 import DiscoursePlaceholderBuilder from "../components/modal/discourse-placeholder-builder";
 
 const VALID_TAGS =
