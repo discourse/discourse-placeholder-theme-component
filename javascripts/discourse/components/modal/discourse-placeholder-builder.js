@@ -1,8 +1,8 @@
 import Component from "@ember/component";
 import EmberObject, { action } from "@ember/object";
+import { service } from "@ember/service";
 import { isBlank } from "@ember/utils";
 import I18n from "I18n";
-import { inject as service } from "@ember/service";
 
 export default class DiscoursePlaceholderBuilder extends Component {
   @service dialog;
