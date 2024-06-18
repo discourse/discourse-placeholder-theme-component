@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 de:
+  toolbar:
+    builder: "Platzhalter hinzufügen"
+  builder:
+    errors:
+      no_key: "Ein Schlüssel ist erforderlich."
+    title: "Platzhalter hinzufügen"
+    insert: "Einfügen"
+    key:
+      label: "Schlüssel"
+      description: "Der =Schlüssel=, der im Beitrag ersetzt werden soll."
+    description:
+      label: "Beschreibung"
+      description: "Beschreibung, die bei der Eingabe angezeigt wird, wenn kein Wert festgelegt wurde."
+    values:
+      label: "Standardwert(e)"
+      description: "Optionale(r) Wert(e) für deinen Platzhalter. Wenn mehrere Werte definiert sind, wird eine Auswahl verwendet."
