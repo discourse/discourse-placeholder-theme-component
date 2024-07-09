@@ -5,3 +5,15 @@
 # https://translate.discourse.org/
 
 he:
+  toolbar:
+    builder: "הוספת ממלא מקום"
+  builder:
+    errors:
+      no_key: "צריך מפתח."
+    title: "הוספת ממלא מקום"
+    insert: "הוספה"
+    key:
+      label: "מפתח"
+      description: "ה=מפתח= שיוחלף בפוסט."
+    description:
+      label: "תיאור"
