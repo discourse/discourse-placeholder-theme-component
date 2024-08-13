@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 fi:
+  toolbar:
+    builder: "Lisää paikkamerkki"
+  builder:
+    errors:
+      no_key: "Avain on pakollinen."
+    title: "Lisää paikkamerkki"
+    insert: "Lisää"
+    key:
+      label: "Avain"
+      description: "Viestissä korvattava =avain=."
+    description:
+      label: "Kuvaus"
+      description: "Kuvaus, joka näytetään syötteessä, jossa ei ole asetettu arvoa."
+    values:
+      label: "Oletusarvo(t)"
+      description: "Paikkamerkkisi valinnaiset arvot. Jos useita arvoja on määritetty, valintaa käytetään."

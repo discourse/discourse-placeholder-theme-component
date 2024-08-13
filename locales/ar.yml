@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 ar:
+  toolbar:
+    builder: "إضافة عنصر نائب"
+  builder:
+    errors:
+      no_key: "مطلوب مفتاح."
+    title: "إضافة عنصر نائب"
+    insert: "إدراج"
+    key:
+      label: "المفتاح"
+      description: "=المفتاح= الذي سيتم استبداله في المنشور."
+    description:
+      label: "الوصف"
+      description: "الوصف المعروض على الإدخال دون قيمة معيَّنة."
+    values:
+      label: "القيمة (القيم) الافتراضية"
+      description: "قيمة (قيم) الاختيارية للعنصر النائب الخاص بك، إذا تم تحديد قيم متعددة، فسيتم استخدام التحديد."

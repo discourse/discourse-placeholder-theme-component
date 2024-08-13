@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 es:
+  toolbar:
+    builder: "Añadir marcador de posición"
+  builder:
+    errors:
+      no_key: "Se requiere una clave."
+    title: "Añadir marcador de posición"
+    insert: "Insertar"
+    key:
+      label: "Clave"
+      description: "La =Clave= que se reemplazará en la publicación."
+    description:
+      label: "Descripción"
+      description: "La descripción se muestra en la entrada sin ningún valor establecido."
+    values:
+      label: "Valor(es) por defecto"
+      description: "Valor(es) opcionales para su marcador de posición, si se definen varios valores, se utilizará una selección."

@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 tr_TR:
+  toolbar:
+    builder: "Yer tutucu ekle"
+  builder:
+    errors:
+      no_key: "Anahtar gerekli."
+    title: "Yer tutucu ekle"
+    insert: "Ekle"
+    key:
+      label: "Anahtar"
+      description: "=Key= gönderide değiştirilecek."
+    description:
+      label: "Açıklama"
+      description: "Hiçbir değer ayarlanmadan girişte gösterilen açıklama."
+    values:
+      label: "Varsayılan değer(ler)"
+      description: "Yer tutucunuz için isteğe bağlı değer(ler), birden fazla değer tanımlanırsa seçim kullanılır."

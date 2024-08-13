@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 fr:
+  toolbar:
+    builder: "Ajouter un espace réservé"
+  builder:
+    errors:
+      no_key: "Une clé est requise."
+    title: "Ajouter un espace réservé"
+    insert: "Insérer"
+    key:
+      label: "Clé"
+      description: "La clé =Key= à remplacer dans la publication."
+    description:
+      label: "Description"
+      description: "Description affichée en entrée sans valeur définie."
+    values:
+      label: "Valeur(s) par défaut"
+      description: "Valeur(s) facultative(s) pour votre espace réservé, si plusieurs valeurs sont définies, une sélection sera utilisée."
