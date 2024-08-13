@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 it:
+  toolbar:
+    builder: "Aggiungi segnaposto"
+  builder:
+    errors:
+      no_key: "È necessaria una chiave."
+    title: "Aggiungi segnaposto"
+    insert: "Inserisci"
+    key:
+      label: "Chiave"
+      description: "La =Chiave= da sostituire nel post."
+    description:
+      label: "Descrizione"
+      description: "Descrizione visualizzata in input senza valore impostato."
+    values:
+      label: "Valore/i predefinito/i"
+      description: "Valore/i facoltativo/i per il segnaposto. Se vengono definiti più valori, verrà utilizzata una selezione."

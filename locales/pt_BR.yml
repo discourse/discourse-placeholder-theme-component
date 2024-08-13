@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 pt_BR:
+  toolbar:
+    builder: "Adicionar espaço reservado"
+  builder:
+    errors:
+      no_key: "Uma chave é obrigatória."
+    title: "Adicionar espaço reservado"
+    insert: "Inserir"
+    key:
+      label: "Chave"
+      description: "A =Key= a ser substituída na postagem."
+    description:
+      label: "Descrição"
+      description: "A descrição exibida na entrada sem nenhum valor definido."
+    values:
+      label: "Valores padrão"
+      description: "Valores opcionais para seu espaço reservado. Se vários valores forem definidos, um deles será selecionado para uso."

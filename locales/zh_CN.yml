@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 zh_CN:
+  toolbar:
+    builder: "添加占位符"
+  builder:
+    errors:
+      no_key: "键为必填项。"
+    title: "添加占位符"
+    insert: "插入"
+    key:
+      label: "键"
+      description: "帖子中要替换的 =Key=。"
+    description:
+      label: "描述"
+      description: "在未设置任何值的情况下，输入时显示的描述。"
+    values:
+      label: "默认值"
+      description: "占位符的可选值，如果定义了多个值，将使用所选项。"

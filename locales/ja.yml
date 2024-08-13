@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 ja:
+  toolbar:
+    builder: "プレースホルダーを追加"
+  builder:
+    errors:
+      no_key: "キーが必要です。"
+    title: "プレースホルダーを追加"
+    insert: "挿入"
+    key:
+      label: "キー"
+      description: "投稿で置き換えられる =Key=。"
+    description:
+      label: "説明"
+      description: "値が設定されていない、入力時に表示される説明。"
+    values:
+      label: "デフォルト値"
+      description: "プレースホルダーのオプションの値。複数の値が定義されている場合、選択が使用されます。"

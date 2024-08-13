@@ -5,3 +5,19 @@
 # https://translate.discourse.org/
 
 nl:
+  toolbar:
+    builder: "Tijdelijke aanduiding toevoegen"
+  builder:
+    errors:
+      no_key: "Sleutel is vereist."
+    title: "Tijdelijke aanduiding toevoegen"
+    insert: "Invoegen"
+    key:
+      label: "Sleutel"
+      description: "De =sleutel= om te vervangen in het bericht."
+    description:
+      label: "Beschrijving"
+      description: "Beschrijving weergegeven bij invoer zonder ingestelde waarde."
+    values:
+      label: "Standaardwaarde(n)"
+      description: "Optionele waarde(n) voor je tijdelijke aanduiding. Als meerdere waarden zijn gedefinieerd, wordt een selectie gebruikt."
