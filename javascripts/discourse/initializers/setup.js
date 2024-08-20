@@ -1,5 +1,6 @@
 import { debounce, later } from "@ember/runloop";
 import { withPluginApi } from "discourse/lib/plugin-api";
+import { escapeExpression } from "discourse/lib/utilities";
 import DiscoursePlaceholderBuilder from "../components/modal/discourse-placeholder-builder";
 
 const VALID_TAGS =
@@ -134,6 +135,8 @@ export default {
             } else {
               newValue = `${placeholder.delimiter}${key}${placeholder.delimiter}`;
             }
+
+            newValue = escapeExpression(newValue);
 
             cooked.querySelectorAll(VALID_TAGS).forEach((elem, index) => {
               const mapping = mappings[index];
