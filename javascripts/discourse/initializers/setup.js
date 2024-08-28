@@ -1,6 +1,5 @@
 import { debounce, later } from "@ember/runloop";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { escapeExpression } from "discourse/lib/utilities";
 import DiscoursePlaceholderBuilder from "../components/modal/discourse-placeholder-builder";
 
 const VALID_TAGS =
@@ -9,6 +8,8 @@ const DELIMITER = "=";
 const EXPIRE_AFTER_DAYS = 7;
 const EXPIRE_AFTER_SECONDS = EXPIRE_AFTER_DAYS * 24 * 60 * 60;
 const STORAGE_PREFIX = "d-placeholder-";
+
+const originalContentMap = new WeakMap();
 
 function buildInput(key, placeholder) {
   const input = document.createElement("input");
@@ -112,7 +113,6 @@ export default {
           }
 
           const postIdentifier = `${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-`;
-          const mappings = [];
           const placeholders = {};
 
           const processChange = (inputEvent) => {
@@ -120,6 +120,7 @@ export default {
             const key = inputEvent.target.dataset.key;
             const placeholder = placeholders[inputEvent.target.dataset.key];
             const placeholderIdentifier = `${postIdentifier}${key}`;
+            const placeholderWithDelimiter = `${placeholder.delimiter}${key}${placeholder.delimiter}`;
 
             if (value) {
               if (value !== placeholder.default) {
@@ -133,83 +134,37 @@ export default {
             if (value && value.length && value !== "none") {
               newValue = value;
             } else {
-              newValue = `${placeholder.delimiter}${key}${placeholder.delimiter}`;
+              newValue = placeholderWithDelimiter;
             }
 
-            newValue = escapeExpression(newValue);
+            cooked.querySelectorAll(VALID_TAGS).forEach((elem) => {
+              const textNodeWalker = document.createTreeWalker(
+                elem,
+                NodeFilter.SHOW_TEXT
+              );
 
-            cooked.querySelectorAll(VALID_TAGS).forEach((elem, index) => {
-              const mapping = mappings[index];
+              while (textNodeWalker.nextNode()) {
+                const node = textNodeWalker.currentNode;
+                let text;
 
-              if (!mapping) {
-                return;
-              }
-
-              let diff = 0;
-              let replaced = false;
-              let newInnerHTML = elem.innerHTML;
-
-              mapping.forEach((m) => {
-                if (
-                  m.pattern !==
-                  `${placeholder.delimiter}${key}${placeholder.delimiter}`
-                ) {
-                  m.position = m.position + diff;
-                  return;
+                if (originalContentMap.has(node)) {
+                  // The content of this node has already been transformed. Use the value
+                  // we saved as the source of truth
+                  text = originalContentMap.get(node);
+                } else {
+                  // Haven't seen this node before. Get the text, and store it for future
+                  // transformations
+                  text = node.data;
+                  originalContentMap.set(node, text);
                 }
 
-                replaced = true;
-
-                const previousLength = m.length;
-                const prefix = newInnerHTML.slice(0, m.position + diff);
-                const suffix = newInnerHTML.slice(
-                  m.position + diff + m.length,
-                  newInnerHTML.length
-                );
-                newInnerHTML = `${prefix}${newValue}${suffix}`;
-
-                m.length = newValue.length;
-                m.position = m.position + diff;
-                diff = diff + newValue.length - previousLength;
-              });
-
-              if (replaced) {
-                elem.innerHTML = newInnerHTML;
+                node.data = text.replaceAll(placeholderWithDelimiter, newValue);
               }
             });
           };
 
-          function processPlaceholders() {
-            mappings.length = 0;
-
-            const keys = Object.keys(placeholders);
-            const pattern = keys
-              .map((key) => {
-                const placeholder = placeholders[key];
-                return `(${placeholder.delimiter}${key}${placeholder.delimiter})`;
-              })
-              .join("|");
-            const regex = new RegExp(pattern, "g");
-
-            cooked.querySelectorAll(VALID_TAGS).forEach((elem, index) => {
-              let match;
-
-              mappings[index] = mappings[index] || [];
-
-              while ((match = regex.exec(elem.innerHTML)) != null) {
-                mappings[index].push({
-                  pattern: match[0],
-                  position: match.index,
-                  length: match[0].length,
-                });
-              }
-            });
-          }
-
           const _fillPlaceholders = () => {
             if (Object.keys(placeholders).length > 0) {
-              processPlaceholders(placeholders, cooked, mappings);
-
               // trigger fake event to setup initial state
               Object.keys(placeholders).forEach((placeholderKey) => {
                 const placeholder = placeholders[placeholderKey];
