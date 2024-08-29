@@ -19,7 +19,7 @@ RSpec.describe "Placeholder", system: true do
       )
     end
 
-    it "replaces on load using" do
+    it "replaces keys on load" do
       topic_page.visit_topic(post.topic)
 
       expect(page).to have_content("BEFORE foo AFTER")
