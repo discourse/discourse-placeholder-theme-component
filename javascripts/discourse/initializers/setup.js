@@ -21,8 +21,8 @@ function buildInput(key, placeholder) {
     input.setAttribute("placeholder", placeholder.description);
   }
 
-  if (placeholder.default) {
-    input.value = placeholder.default;
+  if (placeholder.value) {
+    input.value = placeholder.value;
   }
 
   return input;
@@ -57,11 +57,47 @@ function buildSelect(key, placeholder) {
   placeholder.defaults.forEach((value) =>
     addSelectOption(select, {
       value,
-      selected: placeholder.default === value,
+      selected: placeholder.value === value,
     })
   );
 
   return select;
+}
+
+function performReplacements(cooked, placeholders) {
+  cooked.querySelectorAll(VALID_TAGS).forEach((elem) => {
+    const textNodeWalker = document.createTreeWalker(
+      elem,
+      NodeFilter.SHOW_TEXT
+    );
+
+    while (textNodeWalker.nextNode()) {
+      const node = textNodeWalker.currentNode;
+
+      if (!originalContentMap.has(node)) {
+        // Haven't seen this node before. Get the text, and store it for future transformations
+        originalContentMap.set(node, node.data);
+      }
+
+      const originalText = originalContentMap.get(node);
+      let text = originalText;
+
+      for (const [key, { delimiter, value }] of Object.entries(placeholders)) {
+        const placeholderWithDelimiter = `${delimiter}${key}${delimiter}`;
+
+        let substitution = value;
+        if (!substitution?.length || substitution === "none") {
+          substitution = placeholderWithDelimiter;
+        }
+
+        text = text.replaceAll(placeholderWithDelimiter, substitution);
+      }
+
+      if (node.data !== text) {
+        node.data = text;
+      }
+    }
+  });
 }
 
 export default {
@@ -120,69 +156,16 @@ export default {
             const key = inputEvent.target.dataset.key;
             const placeholder = placeholders[inputEvent.target.dataset.key];
             const placeholderIdentifier = `${postIdentifier}${key}`;
-            const placeholderWithDelimiter = `${placeholder.delimiter}${key}${placeholder.delimiter}`;
 
-            if (value) {
-              if (value !== placeholder.default) {
-                this.setValue(placeholderIdentifier, value);
-              }
+            if (value && value !== placeholder.default) {
+              placeholder.value = value;
+              this.setValue(placeholderIdentifier, value);
             } else {
+              placeholder.value = placeholder.default;
               this.removeValue(placeholderIdentifier);
             }
 
-            let newValue;
-            if (value && value.length && value !== "none") {
-              newValue = value;
-            } else {
-              newValue = placeholderWithDelimiter;
-            }
-
-            cooked.querySelectorAll(VALID_TAGS).forEach((elem) => {
-              const textNodeWalker = document.createTreeWalker(
-                elem,
-                NodeFilter.SHOW_TEXT
-              );
-
-              while (textNodeWalker.nextNode()) {
-                const node = textNodeWalker.currentNode;
-                let text;
-
-                if (originalContentMap.has(node)) {
-                  // The content of this node has already been transformed. Use the value
-                  // we saved as the source of truth
-                  text = originalContentMap.get(node);
-                } else {
-                  // Haven't seen this node before. Get the text, and store it for future
-                  // transformations
-                  text = node.data;
-                  originalContentMap.set(node, text);
-                }
-
-                node.data = text.replaceAll(placeholderWithDelimiter, newValue);
-              }
-            });
-          };
-
-          const _fillPlaceholders = () => {
-            if (Object.keys(placeholders).length > 0) {
-              // trigger fake event to setup initial state
-              Object.keys(placeholders).forEach((placeholderKey) => {
-                const placeholder = placeholders[placeholderKey];
-                const placeholderIdentifier = `${postIdentifier}${placeholderKey}`;
-                const value =
-                  this.getValue(placeholderIdentifier) || placeholder.default;
-
-                processChange({
-                  target: {
-                    value,
-                    dataset: {
-                      key: placeholderKey,
-                      delimiter: placeholder.delimiter,
-                    },
-                  },
-                });
-              });
-            }
+            performReplacements(cooked, placeholders);
           };
 
           const placeholderNodes = cooked.querySelectorAll(
@@ -203,10 +186,11 @@ export default {
               .filter(Boolean);
 
             placeholders[dataKey] = {
-              default: valueFromStore || elem.dataset.default,
+              default: elem.dataset.default,
               defaults: defaultValues,
               delimiter: elem.dataset.delimiter || DELIMITER,
               description: elem.dataset.description,
+              value: valueFromStore || elem.dataset.default,
             };
 
             const span = document.createElement("span");
@@ -245,7 +229,7 @@ export default {
               );
             });
 
-          later(_fillPlaceholders, 500);
+          later(performReplacements, cooked, placeholders, 500);
         },
         { onlyStream: true, id: "discourse-placeholder-theme-component" }
       );
