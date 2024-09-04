@@ -64,6 +64,20 @@ function buildSelect(key, placeholder) {
   return select;
 }
 
+function replaceInText(text, placeholders) {
+  for (const [key, { delimiter, value }] of Object.entries(placeholders)) {
+    const placeholderWithDelimiter = `${delimiter}${key}${delimiter}`;
+
+    let substitution = value;
+    if (!substitution?.length || substitution === "none") {
+      substitution = placeholderWithDelimiter;
+    }
+
+    text = text.replaceAll(placeholderWithDelimiter, substitution);
+  }
+  return text;
+}
+
 function performReplacements(cooked, placeholders) {
   cooked.querySelectorAll(VALID_TAGS).forEach((elem) => {
     const textNodeWalker = document.createTreeWalker(
@@ -71,6 +85,7 @@ function performReplacements(cooked, placeholders) {
       NodeFilter.SHOW_TEXT
     );
 
+    // Handle text nodes
     while (textNodeWalker.nextNode()) {
       const node = textNodeWalker.currentNode;
 
@@ -80,23 +95,28 @@ function performReplacements(cooked, placeholders) {
       }
 
       const originalText = originalContentMap.get(node);
-      let text = originalText;
-
-      for (const [key, { delimiter, value }] of Object.entries(placeholders)) {
-        const placeholderWithDelimiter = `${delimiter}${key}${delimiter}`;
-
-        let substitution = value;
-        if (!substitution?.length || substitution === "none") {
-          substitution = placeholderWithDelimiter;
-        }
-
-        text = text.replaceAll(placeholderWithDelimiter, substitution);
-      }
+      const text = replaceInText(originalText, placeholders);
 
       if (node.data !== text) {
         node.data = text;
       }
     }
+
+    // Handle a[href] attributes
+    document.querySelectorAll("a[href]").forEach((link) => {
+      const hrefAttr = link.attributes.getNamedItem("href");
+
+      if (!originalContentMap.has(hrefAttr)) {
+        // Haven't seen this attr before. Get the text, and store it for future transformations
+        originalContentMap.set(hrefAttr, hrefAttr.value);
+      }
+      const originalUrl = originalContentMap.get(hrefAttr);
+      const newUrl = replaceInText(originalUrl, placeholders);
+
+      if (hrefAttr.value !== newUrl) {
+        hrefAttr.value = newUrl;
+      }
+    });
   });
 }
 

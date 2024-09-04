@@ -47,4 +47,30 @@ RSpec.describe "Placeholder", system: true do
       expect(page).to have_content("BEFORE foo bar AFTER")
     end
   end
+
+  context "when placeholder is used in a[href]" do
+    fab!(:post) do
+      Fabricate(
+        :post,
+        raw: <<~MD
+          [wrap=placeholder key=\"TEST1\"][/wrap]
+          [Some link](https://example.com/=TEST1=)
+        MD
+      )
+    end
+
+    it "replaces string in href" do
+      topic_page.visit_topic(post.topic)
+
+      expect(page).to have_link(href: "https://example.com/=TEST1=")
+
+      page.find('.discourse-placeholder-value[data-key="TEST1"]').fill_in(with: "foo")
+
+      expect(page).to have_link(href: "https://example.com/foo")
+
+      page.find('.discourse-placeholder-value[data-key="TEST1"]').fill_in(with: "bar")
+
+      expect(page).to have_link(href: "https://example.com/bar")
+    end
+  end
 end
