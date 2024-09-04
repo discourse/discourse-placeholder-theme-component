@@ -103,7 +103,7 @@ function performReplacements(cooked, placeholders) {
     }
 
     // Handle a[href] attributes
-    document.querySelectorAll("a[href]").forEach((link) => {
+    cooked.querySelectorAll("a[href]").forEach((link) => {
       const hrefAttr = link.attributes.getNamedItem("href");
 
       if (!originalContentMap.has(hrefAttr)) {
