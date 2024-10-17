@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe "Placeholder", system: true do
   let(:theme) { Fabricate(:theme) }
   let!(:component) { upload_theme_component(parent_theme_id: theme.id) }
@@ -49,15 +50,10 @@ RSpec.describe "Placeholder", system: true do
   end
 
   context "when placeholder is used in a[href]" do
-    fab!(:post) do
-      Fabricate(
-        :post,
-        raw: <<~MD
+    fab!(:post) { Fabricate(:post, raw: <<~MD) }
           [wrap=placeholder key=\"TEST1\"][/wrap]
           [Some link](https://example.com/=TEST1=)
         MD
-      )
-    end
 
     it "replaces string in href" do
       topic_page.visit_topic(post.topic)
