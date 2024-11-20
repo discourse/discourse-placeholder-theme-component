@@ -12,7 +12,7 @@
       <div class="input">
         <Input
           {{on "input" this.updateKey}}
-          @value={{readonly form.key}}
+          @value={{readonly this.form.key}}
           class="placeholder-builder__key"
         />
       </div>
@@ -26,7 +26,7 @@
       <div class="input">
         <Input
           {{on "input" this.updateDescription}}
-          @value={{readonly form.description}}
+          @value={{readonly this.form.description}}
           class="placeholder-builder__description"
         />
       </div>
@@ -43,10 +43,10 @@
         <MultiSelect
           @valueProperty={{null}}
           @nameProperty={{null}}
-          @value={{form.values}}
-          @content={{form.values}}
+          @value={{this.form.values}}
+          @content={{this.form.values}}
           @options={{hash allowAny=true placementStrategy="absolute"}}
-          @onChange={{fn (mut form.values)}}
+          @onChange={{fn (mut this.form.values)}}
           class="placeholder-builder__default-values"
         />
       </div>
