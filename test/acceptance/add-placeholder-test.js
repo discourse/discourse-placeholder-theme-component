@@ -2,7 +2,7 @@ import { click, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 
 acceptance("Discourse Placeholder | Add a placeholder", function (needs) {
   needs.user();
@@ -16,7 +16,7 @@ acceptance("Discourse Placeholder | Add a placeholder", function (needs) {
 
     await click(".d-editor-button-bar .options");
     await selectKit(".toolbar-popup-menu-options").expand();
-    const buttonSelector = `.select-kit-row[data-name='${I18n.t(
+    const buttonSelector = `.select-kit-row[data-name='${i18n(
       themePrefix("toolbar.builder")
     )}']`;
     assert.dom(buttonSelector).exists("it shows the composer button");
@@ -27,7 +27,7 @@ acceptance("Discourse Placeholder | Add a placeholder", function (needs) {
     await click(".d-modal .btn-primary");
     assert
       .dom(".dialog-body")
-      .hasText(I18n.t(themePrefix("builder.errors.no_key")));
+      .hasText(i18n(themePrefix("builder.errors.no_key")));
     await click(".dialog-footer .btn-primary");
 
     await fillIn(".placeholder-builder__key", "password");

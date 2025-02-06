@@ -2,7 +2,7 @@ import Component from "@ember/component";
 import EmberObject, { action } from "@ember/object";
 import { service } from "@ember/service";
 import { isBlank } from "@ember/utils";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 
 export default class DiscoursePlaceholderBuilder extends Component {
   @service dialog;
@@ -26,7 +26,7 @@ export default class DiscoursePlaceholderBuilder extends Component {
   @action
   insertPlaceholder() {
     if (isBlank(this.form.key)) {
-      this.dialog.alert(I18n.t(themePrefix("builder.errors.no_key")));
+      this.dialog.alert(i18n(themePrefix("builder.errors.no_key")));
       return;
     }
 
