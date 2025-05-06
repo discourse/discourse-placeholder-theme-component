@@ -161,14 +161,14 @@ export default {
     this.keyValueStore = container.lookup("service:key-value-store");
     this.expireOldValues();
 
-    withPluginApi("0.8.7", (api) => {
+    withPluginApi((api) => {
       api.decorateCookedElement(
-        (cooked, postWidget) => {
-          if (!postWidget) {
+        (cooked, helper) => {
+          if (!helper) {
             return;
           }
 
-          const postIdentifier = `${postWidget.widget.attrs.topicId}-${postWidget.widget.attrs.id}-`;
+          const postIdentifier = `${helper.model.topic?.id}-${helper.model.id}-`;
           const placeholders = {};
 
           const processChange = (inputEvent) => {
