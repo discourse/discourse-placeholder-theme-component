@@ -6,7 +6,6 @@ import { service } from "@ember/service";
 import { isBlank } from "@ember/utils";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
-import themePrefix from "discourse/helpers/theme-prefix";
 import { i18n } from "discourse-i18n";
 import MultiSelect from "select-kit/components/multi-select";
 
