@@ -14,13 +14,14 @@ acceptance("Discourse Placeholder | Add a placeholder", function (needs) {
     await categoryChooser.expand();
     await categoryChooser.selectRowByValue(2);
 
-    await click(".d-editor-button-bar .options");
-    await selectKit(".toolbar-popup-menu-options").expand();
-    const buttonSelector = `.select-kit-row[data-name='${i18n(
-      themePrefix("toolbar.builder")
-    )}']`;
-    assert.dom(buttonSelector).exists("it shows the composer button");
-    await click(buttonSelector);
+    await click(
+      ".toolbar-popup-menu-options[data-identifier='toolbar-menu__options']"
+    );
+    await click(
+      `.dropdown-menu__item .btn[title='${i18n(
+        themePrefix("toolbar.builder")
+      )}']`
+    );
 
     assert.dom(".d-modal.placeholder-builder").exists();
 
