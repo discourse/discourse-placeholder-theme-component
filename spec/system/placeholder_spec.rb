@@ -3,7 +3,7 @@ RSpec.describe "Placeholder", system: true do
   let(:theme) { Fabricate(:theme) }
   let!(:component) { upload_theme_component(parent_theme_id: theme.id) }
 
-  fab!(:current_user) { Fabricate(:user) }
+  fab!(:current_user, :user)
 
   let(:topic_page) { PageObjects::Pages::Topic.new }
 
