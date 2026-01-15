@@ -5,3 +5,18 @@
 # https://translate.discourse.org/
 
 vi:
+  toolbar:
+    builder: "Thêm phần giữ chỗ"
+  builder:
+    errors:
+      no_key: "Cần có một khóa."
+    title: "Thêm phần giữ chỗ"
+    insert: "Chèn"
+    key:
+      label: "Khóa"
+      description: "=Khóa= sẽ được thay thế trong tút."
+    description:
+      label: "Mô tả"
+      description: "Mô tả hiển thị trên ô nhập liệu khi chưa có giá trị nào được thiết lập."
+    values:
+      label: "(Các) giá trị mặc định"
