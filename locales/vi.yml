@@ -20,3 +20,4 @@ vi:
       description: "Mô tả hiển thị trên ô nhập liệu khi chưa có giá trị nào được thiết lập."
     values:
       label: "(Các) giá trị mặc định"
+      description: "Giá trị tùy chọn cho phần giữ chỗ của bạn; nếu có nhiều giá trị được xác định, một hộp chọn sẽ được sử dụng."
