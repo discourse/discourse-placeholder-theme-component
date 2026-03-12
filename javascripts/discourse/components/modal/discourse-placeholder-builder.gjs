@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-classic-components, ember/require-tagless-components */
 import Component, { Input } from "@ember/component";
 import { fn, hash } from "@ember/helper";
 import { on } from "@ember/modifier";
@@ -6,8 +7,8 @@ import { service } from "@ember/service";
 import { isBlank } from "@ember/utils";
 import DButton from "discourse/components/d-button";
 import DModal from "discourse/components/d-modal";
+import MultiSelect from "discourse/select-kit/components/multi-select";
 import { i18n } from "discourse-i18n";
-import MultiSelect from "select-kit/components/multi-select";
 
 export default class DiscoursePlaceholderBuilder extends Component {
   @service dialog;
