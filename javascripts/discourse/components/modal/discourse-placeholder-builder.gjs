@@ -44,7 +44,7 @@ export default class DiscoursePlaceholderBuilder extends Component {
 
     if (this.form.values.length) {
       if (this.form.values.length === 1) {
-        output += ` default="${this.form.values.firstObject}"`;
+        output += ` default="${this.form.values[0]}"`;
       } else {
         output += ` defaults="${this.form.values.join(",")}"`;
       }
